@@ -3,6 +3,7 @@ import os
 import boto3 as boto3
 from aws_lambda_powertools import Logger
 from domain.utils.json_handler import json_handler
+from domain.utils.utils import file_in_s3_bucket
 
 logger = Logger()
 client = boto3.client('events')
@@ -14,6 +15,10 @@ def handler(event, context):
     dict_event = event['detail']
     name = dict_event['file_name']
     prefix = dict_event['prefix']
+
+    if not file_in_s3_bucket(name, prefix):
+        logger.info(f"Could not find resource in s3 for: {name}.json")
+        raise FileNotFoundError
 
     object_key = f"{prefix}/{name}.json"
     bucket_name = os.environ.get("S3_BUCKET_NAME")

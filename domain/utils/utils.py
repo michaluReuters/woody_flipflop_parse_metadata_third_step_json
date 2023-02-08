@@ -2,9 +2,33 @@ import json
 import os
 import boto3
 from aws_lambda_powertools import Logger
+from botocore.exceptions import ClientError
 
 logger = Logger()
 appconfig = boto3.client('appconfig')
+s3_bucket = boto3.resource("s3")
+s3_bucket_name = os.environ.get("S3_BUCKET_NAME")
+
+
+def file_in_s3_bucket(file_name_sns, prefix) -> bool:
+    """
+    Checks if specified file exists in s3 bucket
+
+    :param:
+        file_name_sns: file that needs to be checked
+
+    :return:
+        bool: status
+    """
+
+    try:
+        logger.info(f"Looking for a file in bucket: {file_name_sns} and prefix: {prefix}")
+        s3_bucket.Object(s3_bucket_name, f"{prefix}/{file_name_sns}.json").load()
+        logger.info(f"File found in bucket!")
+    except ClientError:
+        logger.error(f"File not found in bucket:{prefix}/{file_name_sns}")
+        return False
+    return True
 
 
 def call_for_required_fields(prefix):
