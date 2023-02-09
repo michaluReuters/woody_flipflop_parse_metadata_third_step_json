@@ -1,5 +1,5 @@
 import json
-from utils import call_for_required_fields
+from domain.utils import call_for_required_fields
 from aws_lambda_powertools import Logger
 
 logger = Logger()

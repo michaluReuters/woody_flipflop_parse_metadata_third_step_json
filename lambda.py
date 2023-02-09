@@ -2,8 +2,8 @@ import json
 import os
 import boto3 as boto3
 from aws_lambda_powertools import Logger
-from domain.utils.json_handler import json_handler
-from domain.utils.utils import file_in_s3_bucket
+from domain.json_handler import json_handler
+from domain.utils import file_in_s3_bucket
 
 logger = Logger()
 client = boto3.client('events')
