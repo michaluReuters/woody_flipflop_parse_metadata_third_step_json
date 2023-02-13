@@ -5,7 +5,7 @@ from aws_lambda_powertools import Logger
 from botocore.exceptions import ClientError
 
 logger = Logger()
-appconfig = boto3.client('appconfig')
+appconfig = boto3.client('appconfig', region_name='eu-west-2')
 s3_bucket = boto3.resource("s3")
 s3_bucket_name = os.environ.get("S3_BUCKET_NAME")
 
