@@ -25,6 +25,22 @@ def json_handler(json_string: str, prefix: str) -> dict:
 
 
 def get_inner_data(json_string, directories_dict):
+    """
+    This function extracts values from a JSON string based on a provided dictionary.
+
+    :param:
+        json_string (str): The JSON string to extract values from.
+        directories_dict (dict): A dictionary where each key represents a desired output key, and each value is a list
+        of keys or indices to traverse in the JSON string to reach the desired value.
+
+    :return:
+        dict: A dictionary containing the extracted values, where each key is the key from directories_dict and each
+        value is the extracted value from the JSON string.
+
+    :raises:
+        KeyError: If a key in the directories_dict value list does not exist in the JSON string.
+        TypeError: If an item in the directories_dict value list is not a key in the JSON string.
+    """
     end_result = {}
     dictionary = json.loads(json_string)
     for k, v in directories_dict.items():

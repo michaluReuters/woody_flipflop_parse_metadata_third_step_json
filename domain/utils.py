@@ -32,6 +32,19 @@ def file_in_s3_bucket(file_name_sns, prefix) -> bool:
 
 
 def call_for_required_fields(prefix):
+    """
+    This function retrieves the required fields for a configuration with a given prefix using AWS Systems Manager
+    Parameter Store.
+
+    :param:
+        prefix (str): The prefix used to identify the configuration in Parameter Store.
+
+    :return:
+        str: A string representation of the configuration data.
+
+    :raise:
+        KeyError: If the required environment variables are not set.
+    """
     configuration_prefixes = appconfig.get_hosted_configuration_version(
         ApplicationId=os.environ.get('APP_CONFIG_APP_ID'),
         ConfigurationProfileId=os.environ.get(f'APP_CONFIG_{prefix.replace("-", "_").upper()}_ID'),
