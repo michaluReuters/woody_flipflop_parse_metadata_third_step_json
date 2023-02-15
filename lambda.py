@@ -35,7 +35,7 @@ def handler(event, context):
         "DetailType": "metadata-step-complete",
         'Detail': data_str
     }
-    logger.info(f"Completing step 2 with entry: {entry}")
+    logger.info(f"Completing step 3 with entry: {entry}")
     response = client.put_events(
         Entries=[entry, ]
     )

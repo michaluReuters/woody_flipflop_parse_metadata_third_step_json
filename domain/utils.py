@@ -5,7 +5,7 @@ from aws_lambda_powertools import Logger
 from botocore.exceptions import ClientError
 
 logger = Logger()
-appconfig = boto3.client('appconfig', region_name='eu-west-2')
+appconfig = boto3.client('appconfig')
 s3_bucket = boto3.resource("s3")
 s3_bucket_name = os.environ.get("S3_BUCKET_NAME")
 
@@ -32,19 +32,6 @@ def file_in_s3_bucket(file_name_sns, prefix) -> bool:
 
 
 def call_for_required_fields(prefix):
-    """
-    This function retrieves the required fields for a configuration with a given prefix using AWS Systems Manager
-    Parameter Store.
-
-    :param:
-        prefix (str): The prefix used to identify the configuration in Parameter Store.
-
-    :return:
-        str: A string representation of the configuration data.
-
-    :raise:
-        KeyError: If the required environment variables are not set.
-    """
     configuration_prefixes = appconfig.get_hosted_configuration_version(
         ApplicationId=os.environ.get('APP_CONFIG_APP_ID'),
         ConfigurationProfileId=os.environ.get(f'APP_CONFIG_{prefix.replace("-", "_").upper()}_ID'),
@@ -52,6 +39,5 @@ def call_for_required_fields(prefix):
     )['Content'].read().decode('utf-8')
 
     data = json.loads(configuration_prefixes)
-    required_fields = {config["source-field"]: config["destination-field"] for config in data}
-    logger.info(f"Required fields gathered: {required_fields}")
-    return required_fields
+    logger.info(f"Required fields gathered: {data}")
+    return data
