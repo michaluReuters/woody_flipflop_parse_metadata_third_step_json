@@ -26,8 +26,8 @@ def handler(event, context):
         Bucket=bucket_name, Key=object_key)["Body"].read().decode("UTF-8")
 
     required_fields = json_handler(file_content, prefix)
-
-    data_str = json.dumps(required_fields)
+    dict_event.update(required_fields)
+    data_str = json.dumps(dict_event)
 
     entry = {
         "Source": "new-ppe-sonyhivemetadata-step3-complete",
